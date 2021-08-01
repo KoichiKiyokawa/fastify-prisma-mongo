@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node-dev src/index.ts"
   },
   "dependencies": {
     "@prisma/client": "^2.27.0",

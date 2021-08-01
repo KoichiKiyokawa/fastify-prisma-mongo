@@ -10,6 +10,7 @@ export async function setupSwagger(app: FastifyInstance) {
         title: "mongo fastify",
         version: "1.0.0",
       },
+      tags: [{ name: "user" }, { name: "post" }],
     },
     exposeRoute: true,
   })
