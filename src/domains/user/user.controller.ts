@@ -1,6 +1,7 @@
 import { User } from "@prisma/client"
 import { FastifyRequest } from "fastify"
 import { prisma } from "../../modules/prisma"
+import createError from "http-errors"
 
 export const UserController = {
   async index(req: FastifyRequest<{ Querystring: { email?: string } }>) {
@@ -10,7 +11,10 @@ export const UserController = {
     return prisma.user.findMany()
   },
   async show(req: FastifyRequest<{ Params: { id: string } }>) {
-    return prisma.user.findUnique({ where: { id: req.params.id } })
+    const user = await prisma.user.findUnique({ where: { id: req.params.id } })
+    if (user == null) throw new createError.NotFound()
+
+    return user
   },
   async create(req: FastifyRequest<{ Body: Omit<User, "id"> }>) {
     return prisma.user.create({ data: req.body })

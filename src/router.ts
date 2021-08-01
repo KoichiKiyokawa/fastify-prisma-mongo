@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginAsync } from "fastify"
 import { AppController } from "./domains/app/app.controller"
-import { UserController } from "./domains/user/user.controller"
+import { UserRouter } from "./domains/user/user.router"
+import { PostRouter } from "./domains/post/post.router"
 
 export function setupRoute(router: FastifyInstance) {
   router.register(setup, { prefix: "api/v1" })
@@ -8,23 +9,6 @@ export function setupRoute(router: FastifyInstance) {
 
 const setup: FastifyPluginAsync = async (router) => {
   router.get("/", AppController.index)
-
-  defineResources(router, "users", UserController)
-}
-
-function defineResources(
-  router: FastifyInstance,
-  pathname: string,
-  controller: Partial<
-    Record<
-      "index" | "show" | "create" | "update" | "destroy",
-      (...args: any) => Promise<unknown>
-    >
-  >
-) {
-  if (controller.index) router.get(`/${pathname}`, controller.index)
-  if (controller.show) router.get(`/${pathname}/:id`, controller.show)
-  if (controller.create) router.post(`/${pathname}`, controller.create)
-  if (controller.update) router.patch(`/${pathname}/:id`, controller.update)
-  if (controller.destroy) router.patch(`/${pathname}/:id`, controller.destroy)
+  UserRouter(router)
+  PostRouter(router)
 }
