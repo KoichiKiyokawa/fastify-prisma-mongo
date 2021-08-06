@@ -62,6 +62,7 @@ const setup: FastifyPluginAsync = async (router) => {
       schema: {
         summary: "ユーザ更新",
         description: "指定したユーザを更新する",
+        params: Type.Object({ id: Type.String() }),
         tags: ["user"],
         body: UpdateUserDTO,
         response: { 200: { description: "更新後のユーザ", ...UserDef } },
