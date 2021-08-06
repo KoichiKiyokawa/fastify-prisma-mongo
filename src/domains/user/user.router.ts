@@ -68,5 +68,22 @@ const setup: FastifyPluginAsync = async (router) => {
     },
     UserController.update
   )
-  // router.patch("/:id", UserController.destroy)
+
+  router.delete(
+    ":/id",
+    {
+      schema: {
+        summary: "ユーザ削除",
+        description: "指定したユーザを削除する",
+        tags: ["user"],
+        response: {
+          200: {
+            description: "削除したユーザのid",
+            ...Type.Object({ id: Type.String() }),
+          },
+        },
+      },
+    },
+    UserController.delete
+  )
 }

@@ -30,4 +30,7 @@ export const UserController = {
   async findByEmail() {
     return "ok"
   },
+  async delete(req: FastifyRequest<{ Params: { id: string } }>) {
+    return prisma.user.delete({ where: { id: req.params.id } })
+  },
 }
