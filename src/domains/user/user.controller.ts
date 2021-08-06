@@ -33,4 +33,8 @@ export const UserController = {
   async delete(req: FastifyRequest<{ Params: { id: string } }>) {
     return prisma.user.delete({ where: { id: req.params.id } })
   },
+
+  async postIndex(req: FastifyRequest<{ Params: { id: string } }>) {
+    return prisma.post.findMany({ where: { userId: req.params.id } })
+  },
 }

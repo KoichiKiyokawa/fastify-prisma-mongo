@@ -1,17 +1,18 @@
 import { Type } from "@sinclair/typebox"
 import { FastifyInstance, FastifyPluginAsync } from "fastify"
+import { PostDef } from "../post/post.def"
 import { CreateUserDTO } from "./dto/create-user"
 import { UpdateUserDTO } from "./dto/update-user"
 import { UserController } from "./user.controller"
 import { UserDef } from "./user.def"
 
 export function UserRouter(app: FastifyInstance) {
-  app.register(setup, { prefix: "users" })
+  app.register(setup, { prefix: "users/" })
 }
 
 const setup: FastifyPluginAsync = async (router) => {
   router.get(
-    "/",
+    "",
     {
       schema: {
         summary: "ユーザ一覧",
@@ -30,7 +31,7 @@ const setup: FastifyPluginAsync = async (router) => {
     UserController.index
   )
   router.get(
-    "/:id",
+    ":id",
     {
       schema: {
         summary: "ユーザ詳細",
@@ -43,7 +44,7 @@ const setup: FastifyPluginAsync = async (router) => {
     UserController.show
   )
   router.post(
-    "/",
+    "",
     {
       schema: {
         summary: "ユーザ作成",
@@ -56,7 +57,7 @@ const setup: FastifyPluginAsync = async (router) => {
     UserController.create
   )
   router.patch(
-    "/:id",
+    ":id",
     {
       schema: {
         summary: "ユーザ更新",
@@ -70,7 +71,7 @@ const setup: FastifyPluginAsync = async (router) => {
   )
 
   router.delete(
-    ":/id",
+    ":id",
     {
       schema: {
         summary: "ユーザ削除",
@@ -85,5 +86,21 @@ const setup: FastifyPluginAsync = async (router) => {
       },
     },
     UserController.delete
+  )
+
+  router.get(
+    ":id/posts",
+    {
+      schema: {
+        summary: "ユーザの投稿一覧",
+        description: "指定したユーザの投稿一覧を取得する",
+        tags: ["user", "post"],
+        params: Type.Object({ id: Type.String() }),
+        response: {
+          200: { description: "投稿一覧", ...Type.Array(PostDef) },
+        },
+      },
+    },
+    UserController.postIndex
   )
 }
